@@ -11,7 +11,10 @@ from alibabacloud_alimt20181012.client import Client as alimt20181012Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_alimt20181012 import models as alimt_20181012_models
 
-from aliyun_credentials import ACCESS_KEY, SECRET_KEY, BUCKET_ENDPOINT, BUCKET_NAME
+ACCESS_KEY = os.getenv('ACCESS_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
+BUCKET_ENDPOINT = os.getenv('BUCKET_ENDPOINT')
+BUCKET_NAME = os.getenv('BUCKET_NAME')
 
 
 def put_file_to_oss(bucket: oss2.Bucket, file_path: str, timeout: int = 120) -> Tuple[str, str]:
