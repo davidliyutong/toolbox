@@ -3,7 +3,7 @@ from setuptools import setup
 requirements = ['alibabacloud_alimt20181012', 'alibabacloud_tea_openapi', 'oss2', 'wget']
 
 setup(name="aliyun_translate",
-      version="1.0.1",
+      version="1.0.3",
       author="davidliyutong",
       keywords=("aliyun", "translate"),
       author_email="davidliyutong@sjtu.edu.cn",

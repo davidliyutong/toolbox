@@ -21,6 +21,7 @@ TRANSLATE_BUCKET_NAME = os.getenv('TRANSLATE_BUCKET_NAME')
 
 N_RETRY_S: int = 120
 N_PROCS: int = 8
+OUTPUT_DIR: str = './'
 
 
 def check_params():
@@ -76,6 +77,7 @@ def get_translation_task(client, task_id: str) -> alimt_20181012_models.GetDocTr
 
 
 def submit_translation_task(bucket, client, filename, src_lang, dst_lang):
+    print(f"[ Info ] Putting file {filename} to OSS")
     object_name, url = put_file_to_oss(bucket, filename)
     res = create_translation_task_from_url(client, url, src_lang, dst_lang)
     if not res.body.status == 'ready':
@@ -103,7 +105,7 @@ def download_translation_task(bucket, client, task_future: Future):
     # Download
     if (res.body.status == 'translated'):
         print(f"[ Info ] Successfully translated document. URL : {res.body.translate_file_url}")
-        wget.download(res.body.translate_file_url, out=filename_out)
+        wget.download(res.body.translate_file_url, out=os.path.join(OUTPUT_DIR,filename_out))
     else:
         print(f"[ Error ] Failed to translate document Result: {res}")
 
@@ -146,11 +148,13 @@ def process_file_api(url, access_key, secret_key, src_lang, dst_lang):
     process_file_url(url, client, src_lang, dst_lang)
 
 
-def main(args):
+def main():
+    global OUTPUT_DIR
     parser = argparse.ArgumentParser()
     parser.add_argument("--src", "-s", type=str, default="en")
     parser.add_argument("--dst", "-d", type=str, default="zh")
     parser.add_argument("--filename", "-f", type=str, default=None)
+    parser.add_argument("--output_dir", "-o", type=str, default=None)
     args = parser.parse_args()
 
     FILENAME: str = args.filename
@@ -165,6 +169,19 @@ def main(args):
 
     SRC_LANG: str = args.src
     DST_LANG: str = args.dst
+    if args.output_dir is not None:
+        if not os.path.exists(args.output_dir):
+            try:
+                os.makedirs(args.output_dir)
+            except Exception as e:
+                print("[ Error ] Directory does not exist and cannot be created", e)
+        if os.path.exists(args.output_dir):
+            OUTPUT_DIR = args.output_dir
+        else:
+            OUTPUT_DIR = './'
+    else:
+        OUTPUT_DIR = './'
+    print(f"[ Info ] Translated files will be saved to {OUTPUT_DIR}")
     check_params()
 
     auth = oss2.Auth(TRANSLATE_ACCESS_KEY, TRANSLATE_SECRET_KEY)
