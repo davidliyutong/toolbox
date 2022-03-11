@@ -1,46 +1,67 @@
 # Usage
 
-## Set environment variables
+## Introduction
+
+To use this script you have to create an aliyun account and enable Object Storage Service(OSS) and Machine Translate (MT) service.
+
+It is also recommended that you create DEDICATED PAM account when using these services.
+
+## Environment setup
+
+First, create a pair of access / secret keys that have access to OSS and MT service. Aliyun's OSS service will be used to temporarily store the file.
+
+Second, create a OSS bucket in the nearest endpoint.
+
+Add these credentials to your path variable
 
 ```bash
 
-export ACCESS_KEY=ExampleAccessKey
-export SECRET_KEY=ExampleSecretKey
-export BUCKET_ENDPOINT=ExampleBucketEndpoint
-export BUCKET_NAME=ExampleBucketName
+export TRANSLATE_ACCESS_KEY=ExampleAccessKey
+export TRANSLATE_SECRET_KEY=ExampleSecretKey
+export TRANSLATE_BUCKET_ENDPOINT=ExampleBucketEndpoint
+export TRANSLATE_BUCKET_NAME=ExampleBucketName
 ```
 
-or modify the `aliyun_credentials.py`
+> Bucket endpoint looks like `oss-cn-shanghai.aliyuncs.com`
 
-```python
-ACCESS_KEY = "ExampleAccessKey"
-SECRET_KEY = "ExampleSecretKey"
-BUCKET_ENDPOINT = "ExampleBucketEndpoint"
-BUCKET_NAME = "ExampleBucketName"
-```
-
-Bucket endpoint looks like `oss-cn-shanghai.aliyuncs.com`
-
-Aliyun's OSS service will be used to temporarily store the file. So the access key must have OSS access as well as MachineTranslation access.
+If these variables are not set, the translator will ask for them in a interactive prompt.
 
 ## Run Python script
+
+You can run the script directly
 
 Translation from English to Chinese:
 
 ```bash
-python aliyun_translate.py -f './Client_Selection_for_Federated_Learning_with_Heterogeneous_Resources_in_Mobile_Edge.pdf' \
+python ./aliyun_translate/translate.py -f './Input.pdf' \
                            --src=en \
                            --dst=zh
 ```
 
 ## Execute Python Module
 
+To install the package, run:
+
 ```bash
-python -m aliyun_translate -f './Client_Selection_for_Federated_Learning_with_Heterogeneous_Resources_in_Mobile_Edge.pdf' \
+python setup.py install
+```
+
+Or you can use pip to install `.whl` releases:
+
+```bash
+pip install aliyun_translate-<version>-<arch>.whl
+```
+
+Then run:
+
+```bash
+python -m aliyun_translate -f './Input' \
                            --src=en \
                            --dst=zh \
-                           --output_dir="./out/"
+                           --output_dir="./Out/"
 ```
+
+## Arguments
 
 | Argument            | Usage                                                   |
 | ------------------- | ------------------------------------------------------- |
