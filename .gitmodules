@@ -1,0 +1,3 @@
+[submodule "src/aliyun-translate"]
+	path = src/aliyun-translate
+	url = https://github.com/davidliyutong/aliyun-translate
