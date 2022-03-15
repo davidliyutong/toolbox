@@ -1,4 +1,0 @@
-alibabacloud_alimt20181012
-alibabacloud_tea_openapi
-oss2
-wget
